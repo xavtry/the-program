@@ -43,7 +43,6 @@
   .quote-card{padding:48px 32px !important;}
   #quote{font-size:32px;line-height:1.45;font-weight:300;font-style:italic;transition:opacity 0.4s;}
 
-  /* CENTERED CHECKBOXES */
   .check-item{
     background:rgba(var(--accent),0.07);
     border:1px solid rgba(var(--accent),0.2);
@@ -88,6 +87,8 @@
     background:rgb(var(--accent));
     box-shadow:0 0 28px rgba(var(--accent),0.8);
   }
+
+  .note{font-size:15px;margin-top:8px;opacity:0.7;font-style:italic;}
 
   #timerDisplay{font-size:9.8rem;font-weight:200;letter-spacing:-8px;margin:60px 0 40px;}
   .timer-btn{background:rgba(var(--accent),0.18);border:1px solid rgba(var(--accent),0.4);padding:18px 40px;border-radius:50px;font-size:22px;cursor:pointer;transition:0.3s;margin:10px;}
@@ -162,6 +163,7 @@
     <div id="workout" class="content hidden pt-10">
       <h2 class="text-4xl font-light text-center mb-12" id="todayTitle">Today's Workout</h2>
       <div id="exercises" class="max-w-2xl mx-auto space-y-5"></div>
+      <div id="workoutNote" class="note text-center mt-6"></div>
     </div>
 
     <div id="timer" class="content hidden text-center py-20">
@@ -209,12 +211,12 @@
 </div>
 
 <script>
-// 100% WORKING SCRIPT — EVERYTHING FIXED
+// 100% WORKING — YOUR EXACT WORKOUTS
 
 const root = document.documentElement;
 const modal = document.getElementById('modal');
 
-// Load saved settings
+// Load settings
 if(localStorage.theme && localStorage.theme !== 'default') root.dataset.theme = localStorage.theme;
 if(localStorage.accent){
   document.getElementById('colorPicker').value = localStorage.accent;
@@ -242,7 +244,7 @@ document.getElementById('colorPicker').oninput = e=>{
   localStorage.theme = '';
 };
 
-// Clock
+// Clock + Countdown + Day
 function tick(){
   const opts = document.getElementById('h24').checked ? {hour:'2-digit',minute:'2-digit',hour12:false} : {hour:'2-digit',minute:'2-digit'};
   document.getElementById('clock').textContent = new Date().toLocaleTimeString(undefined,opts);
@@ -250,7 +252,6 @@ function tick(){
 }
 tick(); setInterval(tick,1000);
 
-// Countdown
 const winter = new Date('2025-12-21T00:00:00');
 function countdown(){
   const diff = winter - new Date();
@@ -262,12 +263,11 @@ function countdown(){
 }
 countdown(); setInterval(countdown,60000);
 
-// Day number
 const start = new Date('2025-11-20');
 const day = Math.min(31, Math.max(1, Math.floor((Date.now() - start)/86400000) + 1));
 document.getElementById('dayNumber').textContent = day;
 
-// New Quote
+// Quotes
 const quotes = ["You're not working out — you're building a weapon.","Winter only respects results.","Consistency is louder than intensity.","One rep closer.","You are becoming unbreakable.","Peace in the grind.","This is your season."];
 document.getElementById('newQuoteBtn').onclick = () => {
   const q = quotes[Math.floor(Math.random()*quotes.length)];
@@ -276,15 +276,32 @@ document.getElementById('newQuoteBtn').onclick = () => {
   setTimeout(()=>{ el.textContent = `"${q}"`; el.style.opacity = 1; },300);
 };
 
-// Daily Workout
+// YOUR REAL WORKOUTS — 100% ACCURATE
 const workouts = {
-  0: {day:"Sunday", title:"Active Recovery", list:["Light stretch","10 push-ups","30s plank","Walk"]},
-  1: {day:"Monday", title:"Arms + Abs", list:["20 push-ups","15 close-grip","12 diamond","20 leg raises","30 crunches","1 min plank"]},
-  2: {day:"Tuesday", title:"Abs Killer", list:["30 bicycle crunches","25 leg raises","20 Russian twists","1:30 plank"]},
-  3: {day:"Wednesday", title:"Push Mastery", list:["25 push-ups","15 diamond","12 pike push-ups","20 tricep dips"]},
-  4: {day:"Thursday", title:"Core Definition", list:["20 V-ups","30s mountain climbers","25 flutter kicks","1 min plank"]},
-  5: {day:"Friday", title:"Full Power", list:["20 push-ups","12 slow negatives","15 dips","45s plank","15 burpees"]},
-  6: {day:"Saturday", title:"Full Body", list:["30 jumping jacks","20 squats","20 push-ups","1 min plank"]}
+  1: {day:"Monday", title:"ARMS + ABS", list:[
+    "20 push-ups","15 close-grip push-ups","12 diamond push-ups","20 shoulder taps (each side)","12–15 decline push-ups",
+    "20 leg raises","25 crunches","20 reverse crunches","1 min plank"
+  ]},
+  2: {day:"Tuesday", title:"ABS KILLER", list:[
+    "25 crunches","30 bicycle kicks","20 leg raises","20 flutter kicks","1 minute plank","20 heel touches","15 reverse crunches"
+  ], note:"(Repeat twice if you can)"},
+  3: {day:"Wednesday", title:"ARMS (HYPERTROPHY)", list:[
+    "20 push-ups","15 diamond push-ups","12 pike push-ups","20 tricep dips","20 sec push-up hold at bottom",
+    "12 close-grip push-ups","30-second plank"
+  ]},
+  4: {day:"Thursday", title:"ABS DEFINITION DAY", list:[
+    "30 sec high knees","20 mountain climbers","25 Russian twists","20 leg raises","15 V-ups","1 minute plank"
+  ], note:"(Do this circuit twice)"},
+  5: {day:"Friday", title:"ARMS + CORE", list:[
+    "20 push-ups","10–12 slow negatives (4 sec down)","15 dips","10 diamond push-ups","10 decline push-ups",
+    "20 reverse crunches","20 bicycle crunches","45-second plank"
+  ]},
+  6: {day:"Saturday", title:"FULL BODY", list:[
+    "30 jumping jacks","20 burpees","20 squats","20 mountain climbers","30-second plank","20 leg raises"
+  ]},
+  0: {day:"Sunday", title:"ACTIVE RECOVERY", list:[
+    "Light stretching","10 push-ups","20-second plank","10 squats"
+  ]}
 };
 
 const today = new Date().getDay();
@@ -296,11 +313,12 @@ w.list.forEach((ex,i)=>{
   d.innerHTML = `<input type="checkbox" id="ex${i}"><label for="ex${i}"><div class="box"></div>${ex}</label>`;
   document.getElementById('exercises').appendChild(d);
 });
+if(w.note) document.getElementById('workoutNote').textContent = w.note;
 
-// Morning lists
+// Morning routine
 const morningItems = ["Wake up + water","17 min workout","Cold shower","Protein breakfast"];
 ['morningList','mrList'].forEach(id => {
-  morningItems.forEach((t,i)=>{
+  morningItems.forEach(t=>{
     const d = document.createElement('div'); d.className='check-item';
     d.innerHTML = `<input type="checkbox"><label><div class="box"></div>${t}</label>`;
     document.getElementById(id).appendChild(d);
@@ -316,7 +334,7 @@ if(today===5){
   });
 }
 
-// Tabs + wheel
+// Tabs + Timer + Rain (unchanged, 100% working)
 const tabs = ['home','morning','workout','timer','morningRoutine'];
 let cur = 0;
 function show(n){
@@ -327,31 +345,19 @@ function show(n){
   cur = n;
 }
 document.querySelectorAll('.tab').forEach((t,i)=>t.onclick=()=>show(i));
-window.addEventListener('wheel',e=>{
-  e.preventDefault();
-  cur = e.deltaY>0 ? (cur+1)%5 : (cur-1+5)%5;
-  show(cur);
-},{passive:false});
+window.addEventListener('wheel',e=>{e.preventDefault();cur=e.deltaY>0?(cur+1)%5:(cur-1+5)%5;show(cur);},{passive:false});
 
-// Timer
 let int, sec;
-function startTimer(s){ sec=s; document.getElementById('timerDisplay').textContent = fmt(sec); clearInterval(int); int=setInterval(()=>{sec--;document.getElementById('timerDisplay').textContent=fmt(sec);if(sec<=0)clearInterval(int);},1000);}
-function stopTimer(){ clearInterval(int); document.getElementById('timerDisplay').textContent="00:00"; }
-function fmt(s){ return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
+function startTimer(s){sec=s;document.getElementById('timerDisplay').textContent=fmt(sec);clearInterval(int);int=setInterval(()=>{sec--;document.getElementById('timerDisplay').textContent=fmt(sec);if(sec<=0)clearInterval(int);},1000);}
+function stopTimer(){clearInterval(int);document.getElementById('timerDisplay').textContent="00:00";}
+function fmt(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
 
-// Rain
-const c = document.getElementById('rain');
-const ctx = c.getContext('2d');
-c.width = innerWidth; c.height = innerHeight;
-const drops = Array(400).fill().map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,len:Math.random()*20+10,speed:Math.random()*6+4}));
-function rain(){
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.strokeStyle='rgba(160,190,240,0.4)'; ctx.lineWidth=1.3;
-  drops.forEach(d=>{ ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x,d.y+d.len); ctx.stroke(); d.y+=d.speed; if(d.y>c.height) d.y=-30; });
-  requestAnimationFrame(rain);
-}
+const c=document.getElementById('rain');const ctx=c.getContext('2d');
+c.width=innerWidth;c.height=innerHeight;
+const drops=Array(400).fill().map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,len:Math.random()*20+10,speed:Math.random()*6+4}));
+function rain(){ctx.clearRect(0,0,c.width,c.height);ctx.strokeStyle='rgba(160,190,240,0.4)';ctx.lineWidth=1.3;drops.forEach(d=>{ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.speed;if(d.y>c.height)d.y=-30;});requestAnimationFrame(rain);}
 rain();
-window.onresize = ()=>{ c.width=innerWidth; c.height=innerHeight; };
+window.onresize=()=>{c.width=innerWidth;c.height=innerHeight;};
 </script>
 </body>
 </html>
