@@ -21,8 +21,7 @@
 
   .panel{width:92%;max-width:960px;height:90vh;background:rgba(18,24,42,0.82);padding:56px 52px;border-radius:40px;backdrop-filter:blur(28px);border:1px solid rgba(80,100,140,0.18);box-shadow:0 35px 100px rgba(0,0,0,0.75);z-index:10;position:relative;display:flex;flex-direction:column;}
   .panel-content{flex:1;overflow-y:auto;padding-right:8px;}
-  .panel-content::-webkit-scrollbar{width:6px;}
-  .panel-content::-webkit-scrollbar-track{background:transparent;}
+  .panel-content::-webkit-scrollbar{width:6px;background:transparent;}
   .panel-content::-webkit-scrollbar-thumb{background:rgba(140,160,210,0.3);border-radius:3px;}
 
   h1{font-size:52px;font-weight:300;letter-spacing:4px;text-align:center;margin-bottom:6px;color:#d0d8e8;}
@@ -33,7 +32,6 @@
   .tab:hover{background:rgba(120,140,180,0.15);}
   .tab.active{background:rgba(140,160,210,0.25);color:#e6edf3;font-weight:500;border:none;}
 
-  /* rest of your styles exactly the same */
   .home-grid{max-width:720px;margin:0 auto;display:grid;gap:28px;}
   .quote-box{background:rgba(80,100,140,0.08);border:1px solid rgba(120,140,180,0.2);border-radius:28px;padding:36px 32px;text-align:center;transition:0.4s;}
   .quote-box:hover{border-color:rgba(140,160,210,0.4);}
@@ -88,69 +86,189 @@
   </div>
 
   <div class="panel-content">
-    <!-- All your content goes here now so it can scroll inside the panel -->
+    <!-- HOME -->
     <div id="home" class="content">
-      <!-- same as before -->
-      <div class="home-grid"> ... </div>
+      <div class="home-grid">
+        <div class="quote-box">
+          <div id="homeQuote">"You're not working out — you're building a weapon."</div>
+          <button class="shuffle-btn" onclick="shuffleHomeQuote()">New Quote</button>
+        </div>
+        <div class="quick-card">
+          <h3>Morning Wins</h3>
+          <div class="space-y-4">
+            <div class="check-item"><input type="checkbox" id="win1"><label for="win1"><div class="box"></div>Made bed</label></div>
+            <div class="check-item"><input type="checkbox" id="win2"><label for="win2"><div class="box"></div>Cold shower</label></div>
+            <div class="check-item"><input type="checkbox" id="win3"><label for="win3"><div class="box"></div>Drank 500ml water</label></div>
+            <div class="check-item"><input type="checkbox" id="win4"><label for="win4"><div class="box"></div>5 min breathing</label></div>
+          </div>
+        </div>
+        <div class="quick-card">
+          <h3>Today’s Focus</h3>
+          <ul class="text-left space-y-2 text-[#b0bac9]">
+            <li>• Stay calm under pressure</li>
+            <li>• No phone until routine done</li>
+            <li>• One extra set today</li>
+            <li>• Smile at least once</li>
+          </ul>
+        </div>
+        <div class="quick-card text-center">
+          <p class="text-lg italic opacity-80">"Small mornings. Massive results."</p>
+        </div>
+      </div>
     </div>
 
-    <div id="morning" class="content hidden"> ... </div>
-    <div id="workout" class="content hidden"> ... </div>
-    <div id="timer" class="content hidden text-center"> ... </div>
-    <div id="morningRoutine" class="content hidden"> ... </div>
+    <!-- MORNING -->
+    <div id="morning" class="content hidden">
+      <h2 class="text-3xl font-light mb-12 text-center text-[#c9d1d9]">Morning Routine • 5:00 AM</h2>
+      <div class="space-y-5">
+        <div class="check-item"><input type="checkbox" id="m1"><label for="m1"><div class="box"></div>5:00 AM — Wake up + drink water</label></div>
+        <div class="check-item"><input type="checkbox" id="m2"><label for="m2"><div class="box"></div>5:05–5:20 — 17 min workout</label></div>
+        <div class="check-item"><input type="checkbox" id="m3"><label for="m3"><div class="box"></div>5:20–5:35 — Shower + ready</label></div>
+        <div class="check-item"><input type="checkbox" id="m4"><label for="m4"><div class="box"></div>5:35–5:50 — Protein breakfast</label></div>
+        <div class="check-item"><input type="checkbox" id="m5"><label for="m5"><div class="box"></div>5:50–6:00 — Chill reset</label></div>
+        <div class="check-item"><input type="checkbox" id="m6"><label for="m6"><div class="box"></div>6:00–6:30 — School prep</label></div>
+      </div>
+    </div>
+
+    <!-- WORKOUT -->
+    <div id="workout" class="content hidden">
+      <h2 class="text-3xl font-light mb-12 text-center text-[#c9d1d9]" id="todayTitle">Today's Workout</h2>
+      <div id="todayExercises" class="space-y-5"></div>
+    </div>
+
+    <!-- TIMER -->
+    <div id="timer" class="content hidden text-center">
+      <div id="timerDisplay">01:00</div>
+      <p class="timer-quote" id="timerQuote">"Breathe. Move. Become."</p>
+      <div class="flex flex-wrap justify-center gap-7 mt-10">
+        <button class="timer-btn" onclick="startTimer(30)">30s</button>
+        <button class="timer-btn" onclick="startTimer(40)">40s</button>
+        <button class="timer-btn" onclick="startTimer(45)">45s</button>
+        <button class="timer-btn" onclick="startTimer(60)">1:00</button>
+        <button class="timer-btn" onclick="startTimer(90)">1:30</button>
+        <button class="timer-btn" onclick="startTimer(120)">2:00</button>
+      </div>
+      <button class="stop-btn" onclick="stopTimer()">STOP</button>
+    </div>
+
+    <!-- MORNING ROUTINE (Friday = full checklist) -->
+    <div id="morningRoutine" class="content hidden">
+      <h2 class="text-3xl font-light mb-12 text-center text-[#c9d1d9]" id="morningRoutineTitle">Morning Routine</h2>
+      <div id="morningRoutineList" class="space-y-5"></div>
+    </div>
   </div>
 </div>
 
-<!-- easter eggs, version, audio same as before -->
 <div class="easter">peace</div><div class="easter">quiet</div><div class="easter">winter</div><div class="easter">stillness</div><div class="easter">strength</div>
-<div class="version">v5.1</div>
+<div class="version">v5.2</div>
 
 <audio id="rain" loop preload="auto">
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-and-thunder-1249.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// ← All the working code from v5.0 (rain, timer, countdown, Friday checklist, etc.) →
+// EVERYTHING NOW IN CORRECT ORDER — NO MORE "Loading..." FOREVER
+const homeQuotes = ["You're not working out — you're building a weapon.","Winter only respects results.","Small steps, every day.","The quietest mornings build the loudest bodies.","Consistency is louder than intensity.","You are becoming unbreakable.","Peace in the grind.","One rep closer.","Today you grow.","This is your season."];
+function shuffleHomeQuote(){
+  const q = document.getElementById('homeQuote');
+  q.style.opacity = 0;
+  setTimeout(()=>{ q.textContent = '"' + homeQuotes[Math.floor(Math.random()*homeQuotes.length)] + '"'; q.style.opacity = 1; }, 300);
+}
+function shuffleTimerQuote(){
+  const quotes = ["Breathe. Move. Become.","This is your time.","One more breath.","Quiet strength.","You are enough.","Just this set."];
+  document.getElementById('timerQuote').textContent = '"' + quotes[Math.floor(Math.random()*quotes.length)] + '"';
+}
 
-// NEW: Prevent default wheel scrolling + use it only for tab switching
-let scrollCooldown = false;
-window.addEventListener('wheel', (e) => {
-  e.preventDefault(); // ← THIS IS KEY: stops the page from scrolling
-  if (scrollCooldown) return;
-  scrollCooldown = true;
-  setTimeout(() => scrollCooldown = false, 350);
+// RAIN
+const canvas = document.getElementById('rain'); const ctx = canvas.getContext('2d');
+canvas.width = innerWidth; canvas.height = innerHeight;
+const drops = Array(500).fill().map(()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,len:Math.random()*18+14,speed:Math.random()*5+3,thick:Math.random()*0.9+0.5}));
+function drawRain(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='rgba(160,180,230,0.35)';
+  drops.forEach(d=>{ ctx.lineWidth=d.thick; ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x+d.len*0.3,d.y+d.len); ctx.stroke(); d.y+=d.speed; if(d.y>canvas.height) d.y=-40; });
+  requestAnimationFrame(drawRain);
+}
+drawRain();
 
-  const tabs = ['home','morning','workout','timer','morningRoutine'];
-  if (e.deltaY > 0) {
-    currentTabIndex = (currentTabIndex + 1) % tabs.length;
-  } else {
-    currentTabIndex = (currentTabIndex - 1 + tabs.length) % tabs.length;
-  }
- 切换Tab(currentTabIndex);
-}, { passive: false }); // important for preventDefault to work
+const cloudImg = new Image(); cloudImg.src = 'https://raw.githubusercontent.com/sebastianstudio/rainy-room/main/cloud.png';
+cloudImg.onload = ()=>{ for(let i=0;i<7;i++){ const c=document.createElement('img'); c.src=cloudImg.src; c.className='cloud'; c.style.top=Math.random()*100+'px'; c.style.width=(280+Math.random()*280)+'px'; c.style.animationDuration=(100+Math.random()*140)+'s'; c.style.animationDelay=Math.random()*70+'s'; document.getElementById('clouds').appendChild(c); }};
 
-// Rest of your flawless script (exactly the same as v5.0)
-const tabs = ['home','morning','workout','timer','morningRoutine'];
+// CLOCK
+function updateClock(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+updateClock(); setInterval(updateClock,1000);
+
+// COUNTDOWN — WORKS INSTANTLY
+const target = new Date('2025-12-21T00:00:00');
+function updateCountdown(){
+  const diff = target - new Date();
+  if(diff < 0){ document.getElementById('countdown').textContent = "Winter is here"; return; }
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff%(1000*60*60))/(1000*60));
+  document.getElementById('countdown').innerHTML = `${d}d ${h.toString().padStart(2,'0')}h ${m.toString().padStart(2,'0')}m`;
+}
+updateCountdown(); setInterval(updateCountdown, 60000);
+
+// WORKOUTS + TODAY
+const workouts = {0:{day:"Sunday",title:"Active Recovery",list:["Light stretch","10 push-ups","20s plank","10 squats","Walk"]},1:{day:"Monday",title:"Arms + Abs",list:["20 push-ups","15 close-grip","12 diamond","20 shoulder taps each","12–15 decline","20 leg raises","25 crunches","20 reverse crunches","1 min plank"]},2:{day:"Tuesday",title:"Abs Killer",list:["25 crunches","30 bicycle kicks","20 leg raises","20 flutter kicks","1 min plank","20 heel touches","15 reverse crunches","(2x)"]},3:{day:"Wednesday",title:"Arms Hypertrophy",list:["20 push-ups","15 diamond","12 pike push-ups","20 tricep dips","20s hold","12 close-grip","30s plank"]},4:{day:"Thursday",title:"Abs Definition",list:["30s high knees","20 mountain climbers","25 Russian twists","20 leg raises","15 V-ups","1 min plank","(2x)"]},5:{day:"Friday",title:"Arms + Core",list:["20 push-ups","10–12 slow negatives","15 dips","10 diamond","10 decline","20 reverse crunches","20 bicycle","45s plank"]},6:{day:"Saturday",title:"Full Body Lean",list:["30 jumping jacks","20 burpees","20 squats","20 mountain climbers","30s plank","20 leg raises"]}};
+const todayWorkout = workouts[new Date().getDay()];
+document.getElementById('todayTitle').textContent = `Today • ${todayWorkout.day} — ${todayWorkout.title}`;
+let workoutHTML = ''; todayWorkout.list.forEach((ex,i)=>{ workoutHTML += `<div class="check-item"><input type="checkbox" id="w${i}"><label for="w${i}"><div class="box"></div>${ex}</label></div>`; });
+document.getElementById('todayExercises').innerHTML = workoutHTML;
+
+// FRIDAY FULL CHECKLIST
+const today = new Date().getDay();
+if (today === 5) {
+  document.getElementById('morningRoutineTitle').textContent = "Friday Full Checklist";
+  const full = ["Woke up at 5:00 AM","Morning workout done","Protein breakfast","After-school workout","Homework finished","In bed by 10:00 PM"];
+  document.getElementById('morningRoutineList').innerHTML = full.map((item,i)=>`<div class="check-item"><input type="checkbox" id="fr${i}"><label for="fr${i}"><div class="box"></div>${item}</label></div>`).join('');
+} else {
+  document.getElementById('morningRoutineList').innerHTML = document.querySelector('#morning .space-y-5').innerHTML;
+}
+
+// TABS + WHEEL NAVIGATION
+const tabIds = ['home','morning','workout','timer','morningRoutine'];
 let currentTabIndex = 0;
-
 function switchTab(index){
   document.querySelectorAll('.content').forEach(c=>c.classList.add('hidden'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(tabs[index]).classList.remove('hidden');
-  document.querySelector(`.tab[data-tab="${tabs[index]}"]`).classList.add('active');
+  document.getElementById(tabIds[index]).classList.remove('hidden');
+  document.querySelector(`.tab[data-tab="${tabIds[index]}"]`).classList.add('active');
   currentTabIndex = index;
 }
+document.querySelectorAll('.tab').forEach(tab=>{ tab.addEventListener('click',()=>{ currentTabIndex = tabIds.indexOf(tab.dataset.tab); switchTab(currentTabIndex); }); });
 
-// click tabs still work
-document.querySelectorAll('.tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    const id = tab.getAttribute('data-tab');
-    currentTabIndex = tabs.indexOf(id);
-    switchTab(currentTabIndex);
-  });
-});
+let scrollCooldown = false;
+window.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  if (scrollCooldown) return;
+  scrollCooldown = true;
+  setTimeout(() => scrollCooldown = false, 350);
+  if (e.deltaY > 0) currentTabIndex = (currentTabIndex + 1) % 5;
+  else currentTabIndex = (currentTabIndex - 1 + 5) % 5;
+  switchTab(currentTabIndex);
+}, { passive: false });
 
-// ← all the rest (rain, timer, countdown, workouts, etc.) exactly as before →
+// TIMER
+let timerInterval, timerTime;
+function startTimer(sec){
+  timerTime = sec;
+  document.getElementById('timerDisplay').textContent = formatTime(timerTime);
+  shuffleTimerQuote();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    timerTime--;
+    document.getElementById('timerDisplay').textContent = formatTime(timerTime);
+    if(timerTime <= 0){ clearInterval(timerInterval); document.getElementById('timerDisplay').textContent = "done"; }
+  },1000);
+}
+function stopTimer(){ clearInterval(timerInterval); document.getElementById('timerDisplay').textContent = "00:00"; }
+function formatTime(s){ const m = Math.floor(s/60).toString().padStart(2,'0'); const ss = (s%60).toString().padStart(2,'0'); return `${m}:${ss}`; }
+
+// RAIN SOUND
+document.body.addEventListener('click',()=>document.getElementById('rain').play(),{once:true});
+window.onresize = ()=>{ canvas.width = innerWidth; canvas.height = innerHeight; };
 </script>
 </body>
 </html>
